@@ -1,0 +1,11 @@
+manifest:
+  remotes:
+    - name: keychron
+      url-base: https://github.com/Keychron
+  projects:
+    - name: zmk
+      remote: keychron
+      revision: rtl8762g
+      import: app/west.yml
+  self:
+    path: config
