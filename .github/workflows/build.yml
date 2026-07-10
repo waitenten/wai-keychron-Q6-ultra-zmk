@@ -1,8 +1,63 @@
 name: Build ZMK firmware
 on:
   push:
-  pull_request:
   workflow_dispatch:
+
 jobs:
   build:
-    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
+    runs-on: ubuntu-latest
+    container:
+      image: zmkfirmware/zmk-build-arm:stable
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - board: keychron
+            shield: keychron_q6_ultra_ansi
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: West Init
+        run: west init -l config
+
+      - name: West Update
+        run: west update --fetch-opt=--filter=tree:0
+
+      - name: West Zephyr export
+        run: west zephyr-export
+
+      # Keychron独自のpost-buildステップ(rtk_post_build)が
+      # "zmk/app/build/zephyr/zmk.bin" という固定の相対パスを直接参照しているため、
+      # -d は必ず "zmk/app/build" に固定する(標準のreusable workflowのような
+      # ランダムな一時ディレクトリだと、このpost-buildが失敗する)。
+      - name: West Build (${{ matrix.board }} / ${{ matrix.shield }})
+        run: |
+          west build -s zmk/app -d zmk/app/build -b "${{ matrix.board }}" -- \
+            -DZMK_CONFIG="${{ github.workspace }}/config" \
+            -DSHIELD="${{ matrix.shield }}"
+
+      - name: Kconfig file
+        if: ${{ !cancelled() }}
+        run: |
+          if [ -f zmk/app/build/zephyr/.config ]; then
+            grep -v -e "^#" -e "^$" zmk/app/build/zephyr/.config | sort
+          else
+            echo "No Kconfig output"
+          fi
+
+      - name: Collect artifacts
+        run: |
+          mkdir -p artifacts
+          if [ -f zmk/app/build/zephyr/zmk.uf2 ]; then
+            cp zmk/app/build/zephyr/zmk.uf2 "artifacts/${{ matrix.shield }}-zmk.uf2"
+          fi
+          if [ -f zmk/app/build/zephyr/zmk.bin ]; then
+            cp zmk/app/build/zephyr/zmk.bin "artifacts/${{ matrix.shield }}-zmk.bin"
+          fi
+
+      - name: Archive (${{ matrix.shield }})
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware-${{ matrix.shield }}
+          path: artifacts
