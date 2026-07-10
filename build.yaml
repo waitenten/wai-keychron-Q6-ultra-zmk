@@ -1,4 +1,4 @@
 ---
 include:
-  - board: rtl8762gku
+  - board: keychron
     shield: keychron_q6_ultra_ansi
