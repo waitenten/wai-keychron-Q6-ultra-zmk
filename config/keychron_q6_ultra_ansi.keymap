@@ -225,7 +225,7 @@
             compatible = "zmk,behavior-tap-dance";
             label = "ENJP";
             #binding-cells = <0>;
-            bindings = <&kp LANGUAGE_2>, <&kp LANG4>;
+            bindings = <&kp LANGUAGE_2>, <&kp LANGUAGE_1>;
         };
     };
 
@@ -389,6 +389,7 @@
         // ==========================================================
         // ここから下、ユーザー指定の追加コンボ(すべてlayer 0のみ有効)
         // ==========================================================
+
         combo_ml {
             timeout-ms = <50>;
             layers = <0>;
@@ -576,12 +577,12 @@
 
         default_layer {
             bindings = <
-&esc_grave               &kp F1    &kp F2    &kp F3     &kp F4    &kp F5    &kp F6     &kp F7   &kp F8     &kp F9    &kp F10     &kp F11     &kp F12          &kp C_MUTE    &kp PRINTSCREEN  &uc LG(C)  &rgb_ug RGB_EFF  &kp F13         &kp F14       &kp F15          &kp F16
-&enjp                 &kp N1    &jis_n2   &kp N3     &kp N4    &kp N5    &jis_n6    &jis_n7  &jis_n8    &jis_n9   &jis_n0     &jis_semi   &jis_sqt         &kp BSPC      &kp INS          &kp HOME   &kp PAGE_UP      &kp KP_NUMLOCK  &kp KP_SLASH  &kp KP_MULTIPLY  &kp KP_MINUS
-&kp TAB               &kp Q     &kp W     &kp E      &kp R     &kp T     &kp Y      &kp U    &kp I      &kp O     &kp P       &jis_lbkt   &jis_rbkt        &jis_bslh     &kp DEL          &kp END    &kp PAGE_DOWN    &kp KP_N7       &kp KP_N8     &kp KP_N9
-&mt INT_HENKAN LCTRL  &kp A     &kp S     &kp D      &kp F     &kp G     &kp H      &kp J    &kp K      &kp L     &jis_minus  &jis_equal  &mt RCTRL ENTER  &kp KP_N4     &kp KP_N5        &kp KP_N6  &kp KP_PLUS
-&kp LSHFT             &kp Z     &kp X     &kp C      &kp V     &kp B     &kp N      &kp M    &kp COMMA  &kp DOT   &kp FSLH    &kp RSHFT   &kp UP           &kp KP_N1     &kp KP_N2        &kp KP_N3
-&kp LCTRL             &kp LGUI  &kp LALT  &kp SPACE  &kp RALT  &kp RGUI  &kp RCTRL  &mo 3    &kp LEFT   &kp DOWN  &kp RIGHT   &kp KP_N0   &kp KP_DOT       &kp KP_ENTER
+&esc_grave            &kp F1            &kp F2    &kp F3     &kp F4    &kp F5    &kp F6     &kp F7   &kp F8     &kp F9    &kp F10     &kp F11     &kp F12          &kp C_MUTE    &kp PRINTSCREEN  &uc LG(C)  &rgb_ug RGB_EFF  &kp F13         &kp F14       &kp F15          &kp F16
+&enjp                 &kp N1            &jis_n2   &kp N3     &kp N4    &kp N5    &jis_n6    &jis_n7  &jis_n8    &jis_n9   &jis_n0     &jis_semi   &jis_sqt         &kp BSPC      &kp INS          &kp HOME   &kp PAGE_UP      &kp KP_NUMLOCK  &kp KP_SLASH  &kp KP_MULTIPLY  &kp KP_MINUS
+&kp TAB               &kp Q             &kp W     &kp E      &kp R     &kp T     &kp Y      &kp U    &kp I      &kp O     &kp P       &jis_lbkt   &jis_rbkt        &jis_bslh     &kp DEL          &kp END    &kp PAGE_DOWN    &kp KP_N7       &kp KP_N8     &kp KP_N9
+&mt INT_HENKAN LCTRL  &kp A             &kp S     &kp D      &kp F     &kp G     &kp H      &kp J    &kp K      &kp L     &jis_minus  &jis_equal  &mt RCTRL ENTER  &kp KP_N4     &kp KP_N5        &kp KP_N6  &kp KP_PLUS
+&kp LSHFT             &kp Z             &kp X     &kp C      &kp V     &kp B     &kp N      &kp M    &kp COMMA  &kp DOT   &kp FSLH    &kp RSHFT   &kp UP           &kp KP_N1     &kp KP_N2        &kp KP_N3
+&kp LCTRL             &kp INT_MUHENKAN  &kp LALT  &kp SPACE  &kp RALT  &kp RGUI  &kp RCTRL  &mo 3    &kp LEFT   &kp DOWN  &kp RIGHT   &kp KP_N0   &kp KP_DOT       &kp KP_ENTER
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
@@ -624,12 +625,12 @@
 
         layer_three {
             bindings = <
-&none            &kp C_BRIGHTNESS_DEC  &kp C_BRIGHTNESS_INC  &uc LG(TAB)      &uc LG(E)        &rgb_ug RGB_BRD  &rgb_ug RGB_BRI  &kp C_PREVIOUS  &kp C_PLAY_PAUSE  &kp C_NEXT  &kp C_MUTE  &kp C_VOLUME_DOWN  &kp C_VOLUME_UP  &rgb_ug RGB_TOG  &none  &none  &rgb_ug RGB_TOG  &none  &none  &none  &none
-&none            &bt_pair_0 0 0        &bt_pair_1 0 0        &bt_pair_2 0 0   &ppt_pair_0 0 0  &none            &none            &none           &none             &none       &none       &none              &none            &none            &none  &none  &none            &none  &none  &none  &none
-&rgb_ug RGB_TOG  &rgb_ug RGB_EFF       &rgb_ug RGB_BRI       &rgb_ug RGB_HUI  &rgb_ug RGB_SAI  &rgb_ug RGB_SPI  &none            &none           &none             &none       &none       &none              &none            &none            &none  &none  &none            &none  &none  &none
-&none            &rgb_ug RGB_EFR       &rgb_ug RGB_BRD       &rgb_ug RGB_HUD  &rgb_ug RGB_SAD  &rgb_ug RGB_SPD  &none            &none           &none             &none       &none       &none              &none            &none            &none  &none  &none
-&none            &none                 &none                 &none            &none            &kc BATINFO      &none            &none           &none             &none       &none       &none              &none            &none            &none  &none
-&none  &none  &none  &none  &none  &none  &none  &none  &none  &none  &none  &none  &none  &long_press_bootloader
+&none            &kp C_BRIGHTNESS_DEC  &kp C_BRIGHTNESS_INC  &uc LG(TAB)      &uc LG(E)        &rgb_ug RGB_BRD  &rgb_ug RGB_BRI  &kp C_PREVIOUS  &kp C_PLAY_PAUSE  &kp C_NEXT  &kp C_MUTE  &kp C_VOLUME_DOWN  &kp C_VOLUME_UP  &rgb_ug RGB_TOG         &none  &none  &rgb_ug RGB_TOG  &none  &none  &none  &none
+&none            &bt_pair_0 0 0        &bt_pair_1 0 0        &bt_pair_2 0 0   &ppt_pair_0 0 0  &none            &none            &none           &none             &none       &none       &none              &none            &none                   &none  &none  &none            &none  &none  &none  &none
+&rgb_ug RGB_TOG  &rgb_ug RGB_EFF       &rgb_ug RGB_BRI       &rgb_ug RGB_HUI  &rgb_ug RGB_SAI  &rgb_ug RGB_SPI  &none            &none           &none             &none       &none       &none              &none            &none                   &none  &none  &none            &none  &none  &none
+&none            &rgb_ug RGB_EFR       &rgb_ug RGB_BRD       &rgb_ug RGB_HUD  &rgb_ug RGB_SAD  &rgb_ug RGB_SPD  &none            &none           &none             &none       &none       &none              &none            &none                   &none  &none  &none
+&none            &none                 &none                 &none            &none            &kc BATINFO      &none            &none           &none             &none       &none       &none              &none            &none                   &none  &none
+&none            &none                 &none                 &none            &none            &none            &none            &none           &none             &none       &none       &none              &none            &long_press_bootloader
             >;
 
             sensor-bindings = <&rgb_encoder>;
