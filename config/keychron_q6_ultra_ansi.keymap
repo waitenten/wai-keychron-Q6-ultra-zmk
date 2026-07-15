@@ -365,6 +365,114 @@
             bindings = <&kc_lp RCV>;
         };
 
+        // ==========================================================
+        // ここから下、ユーザー指定の追加コンボ(すべてlayer 0のみ有効)
+        // ==========================================================
+        combo_ml {
+            timeout-ms = <50>;
+            layers = <0>;
+            key-positions = <69 70>; // J K
+            bindings = <&mkp LCLK>;
+        };
+
+        combo_mr {
+            timeout-ms = <50>;
+            layers = <0>;
+            key-positions = <70 71>; // K L
+            bindings = <&mkp RCLK>;
+        };
+
+        combo_cl {
+            timeout-ms = <50>;
+            layers = <0>;
+            key-positions = <49 50>; // U I
+            bindings = <&kp LEFT>;
+        };
+
+        combo_cr {
+            timeout-ms = <50>;
+            layers = <0>;
+            key-positions = <50 51>; // I O
+            bindings = <&kp RIGHT>;
+        };
+
+        combo_cu {
+            timeout-ms = <50>;
+            layers = <0>;
+            key-positions = <49 51>; // U O
+            bindings = <&kp UP>;
+        };
+
+        combo_cd {
+            timeout-ms = <50>;
+            layers = <0>;
+            key-positions = <69 71>; // J L
+            bindings = <&kp DOWN>;
+        };
+
+        combo_lbkt_c {
+            timeout-ms = <50>;
+            layers = <0>;
+            key-positions = <47 45>; // T E
+            bindings = <&kp RIGHT_BRACKET>; // JIS OS上で [
+        };
+
+        combo_rbkt_c {
+            timeout-ms = <50>;
+            layers = <0>;
+            key-positions = <48 50>; // Y I
+            bindings = <&kp BACKSLASH>; // JIS OS上で ]
+        };
+
+        combo_lparen_c {
+            timeout-ms = <50>;
+            layers = <0>;
+            key-positions = <65 67>; // D G
+            bindings = <&kp ASTERISK>; // JIS OS上で (
+        };
+
+        combo_rparen_c {
+            timeout-ms = <50>;
+            layers = <0>;
+            key-positions = <68 70>; // H K
+            bindings = <&kp LEFT_PARENTHESIS>; // JIS OS上で )
+        };
+
+        combo_bs_c {
+            timeout-ms = <50>;
+            layers = <0>;
+            key-positions = <65 66>; // D F
+            bindings = <&lt 1 BACKSPACE>;
+        };
+
+        combo_ent_c {
+            timeout-ms = <50>;
+            layers = <0>;
+            key-positions = <69 70 71>; // J K L
+            bindings = <&lt 1 ENTER>;
+        };
+
+        combo_to2_c {
+            timeout-ms = <50>;
+            layers = <0>;
+            key-positions = <80 81 82>; // Z X C
+            bindings = <&to 2>;
+        };
+
+        combo_gui_c {
+            timeout-ms = <50>;
+            layers = <0>;
+            key-positions = <67 68>; // G H
+            bindings = <&kp LGUI>;
+        };
+
+        combo_del_c {
+            timeout-ms = <50>;
+            layers = <0>;
+            key-positions = <64 65 66>; // S D F
+            bindings = <&kp DEL>;
+        };
+
         // combo_b {v
         //         timeout-ms = <1000>;
         //         layers =< 1 3>;
