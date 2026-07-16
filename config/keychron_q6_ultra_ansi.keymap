@@ -41,13 +41,24 @@
         // ==========================================================
         // ` (無変換) / ~ (Shift)
 
-        jis_grave: jis_grave {
+        // ` (無変換) / ~ (Shift) の判定(内側)
+        jis_grave_shift: jis_grave_shift {
             compatible = "zmk,behavior-mod-morph";
-            label = "JIS_GRAVE";
+            label = "JIS_GRAVE_SHIFT";
             #binding-cells = <0>;
             bindings = <&kp LEFT_BRACE>, <&kp PLUS>;
 
             mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        // Alt+`は全角半角切り替え(LANG5)。Altが無ければ内側(無変換/Shift判定)へ
+        jis_grave: jis_grave {
+            compatible = "zmk,behavior-mod-morph";
+            label = "JIS_GRAVE";
+            #binding-cells = <0>;
+            bindings = <&jis_grave_shift>, <&kp LANG5>;
+
+            mods = <(MOD_LALT|MOD_RALT)>;
         };
 
         // Escapeキー用: 無変換=ESC / Shift=~(JIS) / Ctrl=`(JIS)
