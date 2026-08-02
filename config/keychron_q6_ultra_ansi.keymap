@@ -641,7 +641,7 @@
 &rgb_ug RGB_TOG  &rgb_ug RGB_EFF       &rgb_ug RGB_BRI       &rgb_ug RGB_HUI  &rgb_ug RGB_SAI  &rgb_ug RGB_SPI  &none            &none           &none             &none       &none       &none              &none            &none                   &none  &none  &none            &none  &none  &none
 &none            &rgb_ug RGB_EFR       &rgb_ug RGB_BRD       &rgb_ug RGB_HUD  &rgb_ug RGB_SAD  &rgb_ug RGB_SPD  &none            &none           &none             &none       &none       &none              &none            &none                   &none  &none  &none
 &none            &none                 &none                 &none            &none            &kc BATINFO      &none            &none           &none             &none       &none       &none              &none            &none                   &none  &none
-&none            &none                 &none                 &none            &none            &none            &none            &none           &none             &none       &none       &none              &none            &long_press_bootloader
+&none            &none                 &none                 &none            &none            &none            &none            &none           &none             &none       &none       &none              &none            &long_press_bootloader 0 0
             >;
 
             sensor-bindings = <&rgb_encoder>;
