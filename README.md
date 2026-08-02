@@ -2,3 +2,4 @@
 
 board: `rtl8762gku`
 shield: `keychron_q6_ultra_ansi`
+JISキーがnoneなっちゃう。未完成。
