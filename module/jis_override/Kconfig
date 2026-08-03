@@ -1,1 +1,14 @@
+config JIS_OVERRIDE
+    bool "Enable independent JIS/ANSI keycode override module"
+    default n
+    help
+      Intercepts specific keycodes at the HID event level (after the
+      keymap behavior fires, but before the standard HID listener builds
+      the outgoing report) and substitutes the raw keycode that produces
+      the correct symbol under a Japanese (JIS) OS keyboard driver.
 
+      This runs entirely independently of keymap bindings (no custom
+      mod-morph behavior name appears anywhere in the keymap), so it is
+      invisible to — and therefore unaffected by — Keychron Launcher's
+      keymap-vocabulary synchronization (which otherwise silently
+      replaces unrecognized custom behaviors with &none).
