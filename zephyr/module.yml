@@ -6,6 +6,7 @@
 # ビルドに組み込まれるようになります。Keychronの本体リポジトリ
 # には一切手を加えていません。
 # ==========================================================
+name: jis_override
 build:
   cmake: module/jis_override
   kconfig: module/jis_override/Kconfig
