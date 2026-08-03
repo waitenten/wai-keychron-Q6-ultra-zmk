@@ -29,46 +29,28 @@
         };
 
         // ==========================================================
-        // ここから下は Keychron 標準ファームウェアには存在しない追記です。
-        // 目的: ANSI物理配列のキーボードを、OS側の設定を「日本語キーボード」
-        // (JIS 106/109) のままにして使う際の、記号キーの表示ズレを補正する。
-        // 参考にした一次情報:
-        //  - sekigon-gonnoc氏 Keyboard Quantizer の os_key_override (QMK Key Override)
-        //  - kloir-z氏「ZMK OS設定を日本語キーボードのまま使う」(note.com)
-        //  - Keychron B1 Pro ZMKでの実装例(緑茶緑々氏, note.com)
-        // 各キーコード名(AT, CARET, INT3 等)はZMK本体 keys.h で定義済みの
-        // 標準エイリアスのみを使用しており、独自の#defineは行っていない。
+        // JIS/ANSI記号補正は、module/jis_override (独立Cモジュール)へ
+        // 移行しました。以下の jis_* mod-morphは、もう .keymap 側の
+        // 通常キーからは使用していません(Cモジュールが同じ内容を、
+        // Launcherに影響されない形で再現しています)。
+        //
+        // Escapeキー用の esc_grave/esc_tilde は引き続き使用しますが、
+        // 中身は「補正済みの結果を直接出す」のではなく、「本来の
+        // ANSIキー(GRAVE / Shift+GRAVE)を合成して送り、Cモジュール
+        // 自身に補正させる」形に書き換えています(Cモジュールとの
+        // 二重補正を避けるため)。
         // ==========================================================
-        // ` (無変換) / ~ (Shift)
-
-        // ` (無変換) / ~ (Shift) の判定(内側)
-        jis_grave_shift: jis_grave_shift {
-            compatible = "zmk,behavior-mod-morph";
-            label = "JIS_GRAVE_SHIFT";
-            #binding-cells = <0>;
-            bindings = <&kp LEFT_BRACE>, <&kp PLUS>;
-
-            mods = <(MOD_LSFT|MOD_RSFT)>;
-        };
-
-        // Alt+`は全角半角切り替え(LANG5)。Altが無ければ内側(無変換/Shift判定)へ
-        jis_grave: jis_grave {
-            compatible = "zmk,behavior-mod-morph";
-            label = "JIS_GRAVE";
-            #binding-cells = <0>;
-            bindings = <&jis_grave_shift>, <&kp LANG5>;
-
-            mods = <(MOD_LALT|MOD_RALT)>;
-        };
 
         // Escapeキー用: 無変換=ESC / Shift=~(JIS) / Ctrl=`(JIS)
-        // 2段階のmod-morphで、Ctrl優先→その次にShiftを判定する
+        // 2段階のmod-morphで、Ctrl優先→その次にShiftを判定する。
+        // Shift/Ctrl分岐は「GRAVEキーを合成して送る」ことで、
+        // Cモジュールのjis_grave相当のルールに補正を委ねている。
 
         esc_tilde: esc_tilde {
             compatible = "zmk,behavior-mod-morph";
             label = "ESC_TILDE";
             #binding-cells = <0>;
-            bindings = <&kp ESC>, <&kp PLUS>;
+            bindings = <&kp ESC>, <&kp LS(GRAVE)>;
 
             mods = <(MOD_LSFT|MOD_RSFT)>;
         };
@@ -77,150 +59,19 @@
             compatible = "zmk,behavior-mod-morph";
             label = "ESC_GRAVE";
             #binding-cells = <0>;
-            bindings = <&esc_tilde>, <&kp LEFT_BRACE>;
+            bindings = <&esc_tilde>, <&kp GRAVE>;
 
             mods = <(MOD_LCTL|MOD_RCTL)>;
         };
 
-        // 2 (無変換) / @ (Shift)
-
-        jis_n2: jis_n2 {
-            compatible = "zmk,behavior-mod-morph";
-            label = "JIS_N2";
-            #binding-cells = <0>;
-            bindings = <&kp N2>, <&kp LEFT_BRACKET>;
-
-            mods = <(MOD_LSFT|MOD_RSFT)>;
-        };
-
-        // 6 (無変換) / ^ (Shift)
-
-        jis_n6: jis_n6 {
-            compatible = "zmk,behavior-mod-morph";
-            label = "JIS_N6";
-            #binding-cells = <0>;
-            bindings = <&kp N6>, <&kp EQUAL>;
-
-            mods = <(MOD_LSFT|MOD_RSFT)>;
-        };
-
-        // 7 (無変換) / & (Shift)
-
-        jis_n7: jis_n7 {
-            compatible = "zmk,behavior-mod-morph";
-            label = "JIS_N7";
-            #binding-cells = <0>;
-            bindings = <&kp N7>, <&kp CARET>;
-
-            mods = <(MOD_LSFT|MOD_RSFT)>;
-        };
-
-        // 8 (無変換) / * (Shift)
-
-        jis_n8: jis_n8 {
-            compatible = "zmk,behavior-mod-morph";
-            label = "JIS_N8";
-            #binding-cells = <0>;
-            bindings = <&kp N8>, <&kp SINGLE_QUOTE>;
-
-            mods = <(MOD_LSFT|MOD_RSFT)>;
-        };
-
-        // 9 (無変換) / ( (Shift)
-
-        jis_n9: jis_n9 {
-            compatible = "zmk,behavior-mod-morph";
-            label = "JIS_N9";
-            #binding-cells = <0>;
-            bindings = <&kp N9>, <&kp ASTERISK>;
-
-            mods = <(MOD_LSFT|MOD_RSFT)>;
-        };
-
-        // 0 (無変換) / ) (Shift)
-
-        jis_n0: jis_n0 {
-            compatible = "zmk,behavior-mod-morph";
-            label = "JIS_N0";
-            #binding-cells = <0>;
-            bindings = <&kp N0>, <&kp LEFT_PARENTHESIS>;
-
-            mods = <(MOD_LSFT|MOD_RSFT)>;
-        };
-
-        // - (無変換) / _ (Shift)
-
-        jis_minus: jis_minus {
-            compatible = "zmk,behavior-mod-morph";
-            label = "JIS_MINUS";
-            #binding-cells = <0>;
-            bindings = <&kp MINUS>, <&kp LS(INT1)>;
-
-            mods = <(MOD_LSFT|MOD_RSFT)>;
-        };
-
-        // = (無変換) / + (Shift)
-
-        jis_equal: jis_equal {
-            compatible = "zmk,behavior-mod-morph";
-            label = "JIS_EQUAL";
-            #binding-cells = <0>;
-            bindings = <&kp UNDER>, <&kp COLON>;
-
-            mods = <(MOD_LSFT|MOD_RSFT)>;
-        };
-
-        // [ (無変換) / { (Shift)
-
-        jis_lbkt: jis_lbkt {
-            compatible = "zmk,behavior-mod-morph";
-            label = "JIS_LBKT";
-            #binding-cells = <0>;
-            bindings = <&kp RIGHT_BRACKET>, <&kp RIGHT_BRACE>;
-
-            mods = <(MOD_LSFT|MOD_RSFT)>;
-        };
-
-        // ] (無変換) / } (Shift)
-
-        jis_rbkt: jis_rbkt {
-            compatible = "zmk,behavior-mod-morph";
-            label = "JIS_RBKT";
-            #binding-cells = <0>;
-            bindings = <&kp BACKSLASH>, <&kp PIPE>;
-
-            mods = <(MOD_LSFT|MOD_RSFT)>;
-        };
-
         // \ (無変換、¥として表示) / | (Shift)
-
+        // INT3を使っており、Cモジュールのトリガー(BACKSLASH)とは
+        // 別のキーコードなので、衝突せず、そのまま使えます。
         jis_bslh: jis_bslh {
             compatible = "zmk,behavior-mod-morph";
             label = "JIS_BSLH";
             #binding-cells = <0>;
             bindings = <&kp INT3>, <&kp LS(INT3)>;
-
-            mods = <(MOD_LSFT|MOD_RSFT)>;
-        };
-
-        // ; (無変換) / : (Shift)
-
-        jis_semi: jis_semi {
-            compatible = "zmk,behavior-mod-morph";
-            label = "JIS_SEMI";
-            #binding-cells = <0>;
-            bindings = <&kp SEMI>, <&kp SINGLE_QUOTE>;
-
-            mods = <(MOD_LSFT|MOD_RSFT)>;
-        };
-
-        // ' (無変換) / " (Shift)
-
-        jis_sqt: jis_sqt {
-            compatible = "zmk,behavior-mod-morph";
-            label = "JIS_SQT";
-            #binding-cells = <0>;
-            bindings = <&kp AMPERSAND>, <&kp AT>;
 
             mods = <(MOD_LSFT|MOD_RSFT)>;
         };
@@ -399,6 +250,9 @@
 
         // ==========================================================
         // ここから下、ユーザー指定の追加コンボ(すべてlayer 0のみ有効)
+        // 括弧類は、Cモジュールとの二重補正を避けるため、
+        // 「補正済みの結果」ではなく「本来のANSIキー+Shiftの合成」で
+        // 記述しています(Cモジュール側で正しい記号に補正されます)。
         // ==========================================================
 
         combo_ml {
@@ -447,28 +301,28 @@
             timeout-ms = <50>;
             layers = <0>;
             key-positions = <47 45>; // T E
-            bindings = <&kp RIGHT_BRACKET>; // JIS OS上で [
+            bindings = <&kp LEFT_BRACKET>; // Cモジュールが JIS OS上で [ に補正
         };
 
         combo_rbkt_c {
             timeout-ms = <50>;
             layers = <0>;
             key-positions = <48 50>; // Y I
-            bindings = <&kp BACKSLASH>; // JIS OS上で ]
+            bindings = <&kp RIGHT_BRACKET>; // Cモジュールが JIS OS上で ] に補正
         };
 
         combo_lparen_c {
             timeout-ms = <50>;
             layers = <0>;
             key-positions = <65 67>; // D G
-            bindings = <&kp ASTERISK>; // JIS OS上で (
+            bindings = <&kp LS(N9)>; // Cモジュールが JIS OS上で ( に補正
         };
 
         combo_rparen_c {
             timeout-ms = <50>;
             layers = <0>;
             key-positions = <68 70>; // H K
-            bindings = <&kp LEFT_PARENTHESIS>; // JIS OS上で )
+            bindings = <&kp LS(N0)>; // Cモジュールが JIS OS上で ) に補正
         };
 
         combo_bs_c {
@@ -585,13 +439,15 @@
         //mac
         // ※ Macを使用しないため、Winレイヤー(layer_two)と完全に同一の内容にしています。
         //   (2026-07-XX 変更。元のMac用内容はlayer_oneと共にKeychronオリジナルのまま残っています)
+        // ※ JIS/ANSI記号補正は module/jis_override (独立Cモジュール) が担当するため、
+        //   ここでは標準の &kp (本来のANSIキーコード) をそのまま使用しています。
 
         default_layer {
             bindings = <
 &esc_grave            &kp F1            &kp F2    &kp F3     &kp F4    &kp F5    &kp F6     &kp F7   &kp F8     &kp F9    &kp F10     &kp F11     &kp F12          &kp C_MUTE    &kp PRINTSCREEN  &uc LG(C)  &rgb_ug RGB_EFF  &kp F13         &kp F14       &kp F15          &kp F16
-&enjp                 &kp N1            &jis_n2   &kp N3     &kp N4    &kp N5    &jis_n6    &jis_n7  &jis_n8    &jis_n9   &jis_n0     &jis_semi   &jis_sqt         &kp BSPC      &kp INS          &kp HOME   &kp PAGE_UP      &kp KP_NUMLOCK  &kp KP_SLASH  &kp KP_MULTIPLY  &kp KP_MINUS
-&kp TAB               &kp Q             &kp W     &kp E      &kp R     &kp T     &kp Y      &kp U    &kp I      &kp O     &kp P       &jis_lbkt   &jis_rbkt        &jis_bslh     &kp DEL          &kp END    &kp PAGE_DOWN    &kp KP_N7       &kp KP_N8     &kp KP_N9
-&mt INT_HENKAN LCTRL  &kp A             &kp S     &kp D      &kp F     &kp G     &kp H      &kp J    &kp K      &kp L     &jis_minus  &jis_equal  &mt RCTRL ENTER  &kp KP_N4     &kp KP_N5        &kp KP_N6  &kp KP_PLUS
+&enjp                 &kp N1            &kp N2    &kp N3     &kp N4    &kp N5    &kp N6     &kp N7   &kp N8     &kp N9    &kp N0      &kp SEMICOLON &kp SINGLE_QUOTE &kp BSPC      &kp INS          &kp HOME   &kp PAGE_UP      &kp KP_NUMLOCK  &kp KP_SLASH  &kp KP_MULTIPLY  &kp KP_MINUS
+&kp TAB               &kp Q             &kp W     &kp E      &kp R     &kp T     &kp Y      &kp U    &kp I      &kp O     &kp P       &kp LEFT_BRACKET &kp RIGHT_BRACKET &kp BACKSLASH &kp DEL          &kp END    &kp PAGE_DOWN    &kp KP_N7       &kp KP_N8     &kp KP_N9
+&mt INT_HENKAN LCTRL  &kp A             &kp S     &kp D      &kp F     &kp G     &kp H      &kp J    &kp K      &kp L     &kp MINUS   &kp EQUAL   &mt RCTRL ENTER  &kp KP_N4     &kp KP_N5        &kp KP_N6  &kp KP_PLUS
 &kp LSHFT             &kp Z             &kp X     &kp C      &kp V     &kp B     &kp N      &kp M    &kp COMMA  &kp DOT   &kp FSLH    &kp RSHFT   &kp UP           &kp KP_N1     &kp KP_N2        &kp KP_N3
 &kp LCTRL             &kp INT_MUHENKAN  &kp LALT  &kp SPACE  &kp RALT  &kp RGUI  &kp RCTRL  &mo 3    &kp LEFT   &kp DOWN  &kp RIGHT   &kp KP_N0   &kp KP_DOT       &kp KP_ENTER
             >;
@@ -600,14 +456,18 @@
         };
 
         //mac fn layer
+        // ※ layer_one内の「固定記号」キー(旧: LEFT_BRACKET/CARET/LS(INT1)直接指定)も、
+        //   Cモジュールとの二重補正を避けるため、「本来のANSIキー+Shift」の合成に
+        //   書き換えています。jis_bslhはINT3を使っており衝突しないため、
+        //   従来のmod-morphのまま残しています。
 
         layer_one {
             bindings = <
 &none           &none  &none  &none          &none       &none             &none            &none      &none      &none      &none         &none  &none  &none  &none  &none  &none  &none  &none  &none  &none
 &none           &none  &none  &none          &none       &none             &none            &none      &none      &none      &none         &none  &none  &none  &none  &none  &none  &none  &none  &none  &none
-&none           &none  &none  &jis_bslh      &kp CARET   &kp LS(N5)        &kp KP_SLASH     &kp KP_N7  &kp KP_N8  &kp KP_N9  &kp KP_PLUS   &none  &none  &none  &none  &none  &none  &none  &none  &none
-&kp CLCK        &none  &none  &kp LS(N4)     &kp LS(N1)  &kp LEFT_BRACKET  &kp KP_ASTERISK  &kp KP_N4  &kp KP_N5  &kp KP_N6  &kp KP_MINUS  &none  &none  &none  &none  &none  &none
-&kp LEFT_SHIFT  &none  &none  &none          &kp LS(N3)  &kp LS(INT1)      &kp KP_N0        &kp KP_N1  &kp KP_N2  &kp KP_N3  &kp KP_DOT    &none  &none  &none  &none  &none
+&none           &none  &none  &jis_bslh      &kp LS(N7)  &kp LS(N5)        &kp KP_SLASH     &kp KP_N7  &kp KP_N8  &kp KP_N9  &kp KP_PLUS   &none  &none  &none  &none  &none  &none  &none  &none  &none
+&kp CLCK        &none  &none  &kp LS(N4)     &kp LS(N1)  &kp LS(N2)        &kp KP_ASTERISK  &kp KP_N4  &kp KP_N5  &kp KP_N6  &kp KP_MINUS  &none  &none  &none  &none  &none  &none
+&kp LEFT_SHIFT  &none  &none  &none          &kp LS(N3)  &kp LS(MINUS)     &kp KP_N0        &kp KP_N1  &kp KP_N2  &kp KP_N3  &kp KP_DOT    &none  &none  &none  &none  &none
 &none           &none  &none  &kp BACKSPACE  &none       &none             &none            &none      &none      &none      &none         &none  &none  &none
             >;
 
@@ -615,18 +475,17 @@
         };
 
         //win
-        // ※ 数字行・記号キーの一部は、OS側キーボード設定が「日本語」の場合に
-        //   ANSIキーキャップの見た目通りの文字が入力されるよう、
-        //   上記 jis_* ビヘイビア(追記分)に置き換えています。
+        // ※ JIS/ANSI記号補正は module/jis_override (独立Cモジュール) が担当するため、
+        //   ここでは標準の &kp (本来のANSIキーコード) をそのまま使用しています。
 
         layer_two {
             bindings = <
-&kp ESC     &kp F1    &kp F2    &kp F3     &kp F4    &kp F5    &kp F6             &kp F7   &kp F8     &kp F9    &kp F10    &kp F11     &kp F12     &kp C_MUTE    &kp PRINTSCREEN  &uc LG(C)  &rgb_ug RGB_EFF  &kp F13         &kp F14       &kp F15          &kp F16
-&jis_grave  &kp N1    &jis_n2   &kp N3     &kp N4    &kp N5    &jis_n6            &jis_n7  &jis_n8    &jis_n9   &jis_n0    &jis_minus  &jis_equal  &kp BSPC      &kp INS          &kp HOME   &kp PAGE_UP      &kp KP_NUMLOCK  &kp KP_SLASH  &kp KP_MULTIPLY  &kp KP_MINUS
-&kp TAB     &kp Q     &kp W     &kp E      &kp R     &kp T     &kp Y              &kp U    &kp I      &kp O     &kp P      &jis_lbkt   &jis_rbkt   &jis_bslh     &kp DEL          &kp END    &kp PAGE_DOWN    &kp KP_N7       &kp KP_N8     &kp KP_N9
-&kp CLCK    &kp A     &kp S     &kp D      &kp F     &kp G     &kp H              &kp J    &kp K      &kp L     &jis_semi  &jis_sqt    &kp RET     &kp KP_N4     &kp KP_N5        &kp KP_N6  &kp KP_PLUS
-&kp LSHFT   &kp Z     &kp X     &kp C      &kp V     &kp B     &kp N              &kp M    &kp COMMA  &kp DOT   &kp FSLH   &kp RSHFT   &kp UP      &kp KP_N1     &kp KP_N2        &kp KP_N3
-&kp LCTRL   &kp LGUI  &kp LALT  &kp SPACE  &kp RALT  &kp RGUI  &kp RIGHT_CONTROL  &to0     &kp LEFT   &kp DOWN  &kp RIGHT  &kp KP_N0   &kp KP_DOT  &kp KP_ENTER
+&kp ESC        &kp F1    &kp F2    &kp F3     &kp F4    &kp F5    &kp F6             &kp F7   &kp F8     &kp F9    &kp F10    &kp F11     &kp F12     &kp C_MUTE    &kp PRINTSCREEN  &uc LG(C)  &rgb_ug RGB_EFF  &kp F13         &kp F14       &kp F15          &kp F16
+&kp GRAVE      &kp N1    &kp N2    &kp N3     &kp N4    &kp N5    &kp N6             &kp N7   &kp N8     &kp N9    &kp N0     &kp MINUS   &kp EQUAL   &kp BSPC      &kp INS          &kp HOME   &kp PAGE_UP      &kp KP_NUMLOCK  &kp KP_SLASH  &kp KP_MULTIPLY  &kp KP_MINUS
+&kp TAB        &kp Q     &kp W     &kp E      &kp R     &kp T     &kp Y              &kp U    &kp I      &kp O     &kp P      &kp LEFT_BRACKET &kp RIGHT_BRACKET &kp BACKSLASH &kp DEL          &kp END    &kp PAGE_DOWN    &kp KP_N7       &kp KP_N8     &kp KP_N9
+&kp CLCK       &kp A     &kp S     &kp D      &kp F     &kp G     &kp H              &kp J    &kp K      &kp L     &kp SEMICOLON &kp SINGLE_QUOTE &kp RET     &kp KP_N4     &kp KP_N5        &kp KP_N6  &kp KP_PLUS
+&kp LSHFT      &kp Z     &kp X     &kp C      &kp V     &kp B     &kp N              &kp M    &kp COMMA  &kp DOT   &kp FSLH   &kp RSHFT   &kp UP      &kp KP_N1     &kp KP_N2        &kp KP_N3
+&kp LCTRL      &kp LGUI  &kp LALT  &kp SPACE  &kp RALT  &kp RGUI  &kp RIGHT_CONTROL  &to0     &kp LEFT   &kp DOWN  &kp RIGHT  &kp KP_N0   &kp KP_DOT  &kp KP_ENTER
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
